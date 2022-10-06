@@ -3,6 +3,10 @@ const usersRoutes = require('./users');
 const moviesRoutes = require('./movies');
 const { createUser, login, logout } = require('../controllers/users');
 const auth = require('../middlewares/auth');
+const {
+  validateLogin,
+  validateSignup,
+} = require('../middlewares/validationJoi');
 
 router.get('/crash-test', () => {
   setTimeout(() => {
@@ -10,8 +14,8 @@ router.get('/crash-test', () => {
   }, 0);
 });
 
-router.post('/signin', login);
-router.post('/signup', createUser);
+router.post('/signin', validateLogin, login);
+router.post('/signup', validateSignup, createUser);
 
 router.get('/signout', logout);
 
