@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ['http://soroka.nomorepartiesxyz.ru', 'https://soroka.nomorepartiesxyz.ru'],
+    origin: ['http://evsoroka.nomoredomains.icu', 'https://evsoroka.nomoredomains.icu'],
     credentials: true,
   }),
 );
