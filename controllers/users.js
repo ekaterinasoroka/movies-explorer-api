@@ -39,6 +39,9 @@ module.exports.updateProfile = async (req, res, next) => {
     if (error.name === 'ValidationError') {
       return next(new BadRequestError('Некорректные данные ввода'));
     }
+    if (error.code === 11000) {
+      return next(new ConflictError('Дублирование email'));
+    }
     return next(new ServerError('Произошла ошибка на сервере'));
   }
 };

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const usersRoutes = require('./users');
 const moviesRoutes = require('./movies');
+const NotFoundError = require('../errors/NotFoundError');
 const { createUser, login, logout } = require('../controllers/users');
 const auth = require('../middlewares/auth');
 const {
@@ -17,9 +18,14 @@ router.get('/crash-test', () => {
 router.post('/signin', validateLogin, login);
 router.post('/signup', validateSignup, createUser);
 
-router.get('/signout', logout);
+router.use(auth);
 
-router.use(auth, usersRoutes);
-router.use(auth, moviesRoutes);
+router.get('/signout', logout);
+router.use(usersRoutes);
+router.use(moviesRoutes);
+
+router.use('*', (req, res, next) => {
+  next(new NotFoundError('Запрашиваемый маршрут не найден'));
+});
 
 module.exports = router;
