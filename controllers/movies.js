@@ -5,8 +5,9 @@ const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
 
 module.exports.getMovies = async (req, res, next) => {
+  const owner = req.users._id;
   try {
-    const movie = await Movies.find({});
+    const movie = await Movies.find({ owner });
     return res.status(200).send(movie);
   } catch (error) {
     return next(new ServerError('Произошла ошибка на сервере'));
