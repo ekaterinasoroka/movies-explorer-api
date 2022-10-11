@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
+const rateLimiter = require('./middlewares/rateLimiter');
 const router = require('./routes/index');
 const errorServer = require('./middlewares/errors');
 
@@ -27,26 +27,10 @@ app.use(
   }),
 );
 
-module.exports.rateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
 app.use(requestLogger);
-app.use(
-  helmet({
-    referrerPolicy: { policy: 'no-referrer' },
-  }),
-);
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-app.use(limiter);
+app.use(helmet());
+
+app.use(rateLimiter);
 
 app.use('/', router);
 
