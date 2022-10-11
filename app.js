@@ -3,11 +3,11 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 
 const { errors } = require('celebrate');
+const helmet = require('helmet');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const router = require('./routes/index');
 const errorServer = require('./middlewares/errors');
 
@@ -18,19 +18,6 @@ const { NODE_ENV, MONGO_DB } = process.env;
 const { PORT = 3000 } = process.env;
 const app = express();
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-app.use(limiter);
-app.use(
-  helmet({
-    referrerPolicy: { policy: 'no-referrer' },
-  }),
-);
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -40,7 +27,26 @@ app.use(
   }),
 );
 
+module.exports.rateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 app.use(requestLogger);
+app.use(
+  helmet({
+    referrerPolicy: { policy: 'no-referrer' },
+  }),
+);
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
 
 app.use('/', router);
 
