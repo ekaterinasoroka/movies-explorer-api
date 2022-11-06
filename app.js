@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ['http://evsoroka.nomoredomains.icu', 'https://evsoroka.nomoredomains.icu'],
+    origin: ['http://evsoroka.nomoredomains.icu', 'https://evsoroka.nomoredomains.icu', 'https://api.nomoreparties.co/beatfilm-movies'],
     credentials: true,
   }),
 );
